@@ -1,0 +1,13 @@
+{
+  "name": "fullcanchas-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Insinga Alejandro, Tebis Marcos Joel, Mattos Omar Oscar Alfredo, Lacki Sinclair Santiago",
+  "license": "MIT",
+  "description": "Backend de la web del complejo de canchas fullcanchas",
+  "type": "module"
+}
