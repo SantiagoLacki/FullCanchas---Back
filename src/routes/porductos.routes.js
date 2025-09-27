@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   crearProducto,
   leerProductos,
-} from "../controllers/productos.controllers";
+} from "../controllers/productos.controllers.js";
 
 const router = Router();
 
