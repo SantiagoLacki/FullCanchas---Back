@@ -41,6 +41,6 @@ const usuariosSchema = new Schema(
   }
 );
 
-const Usuarios = mongoose.model("Usuarios", usuariosSchema);
+const Usuarios = mongoose.model("Usuario", usuariosSchema);
 
 export default Usuarios;
