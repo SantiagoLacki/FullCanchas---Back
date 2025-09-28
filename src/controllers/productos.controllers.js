@@ -10,6 +10,19 @@ export const leerProductos = async (req, res) => {
   }
 };
 
+export const leerProductoID = async (req, res) => {
+  try {
+    const producto = await Productos.findById(req.params.id);
+    if (!producto) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.status(200).json(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al leer el producto" });
+  }
+};
+
 export const crearProducto = async (req, res) => {
   try {
     console.log(req.body);
