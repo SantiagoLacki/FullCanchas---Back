@@ -13,14 +13,17 @@ export const leerUsuarios = async (req, res) => {
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { nombreUsuario, email, password } = req.body;
+    const { nombreUsuario, email, password, rol } = req.body;
     const saltos = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, saltos);
+
+    const rolAsignado = rol === "admin" ? "admin" : "user";
 
     const nuevoUsuario = new Usuario({
       nombreUsuario,
       email,
       password: passwordHash,
+      rol: rolAsignado,
     });
     await nuevoUsuario.save();
     res.status(201).json({
