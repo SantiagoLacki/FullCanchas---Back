@@ -13,6 +13,8 @@ const usuariosSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
       validate: {
         validator: (valor) => {
           return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(
