@@ -4,12 +4,21 @@ import resultadoValidacion from "./resultadoValidacion.js";
 const validarUsuarios = [
   body("nombreUsuario")
     .notEmpty()
-    .withMessage("El nombre del usuario es obligatorio"),
+    .withMessage("El nombre del usuario es obligatorio")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("El nombre de usuario debe tener entre 2 y 50 caracteres")
+    .matches(/^[\w]+$/)
+    .withMessage(
+      "El nombre de usuario solo puede contener letras, números y guiones bajos"
+    )
+    .trim(),
+  ,
   body("email")
     .notEmpty()
     .withMessage("El email es obligatorio")
     .isEmail()
-    .withMessage("El email debe tener un formato válido"),
+    .withMessage("El email debe tener un formato válido")
+    .normalizeEmail(),
   body("password")
     .notEmpty()
     .withMessage("La contraseña es obligatoria")
@@ -21,10 +30,6 @@ const validarUsuarios = [
     .withMessage(
       "La contraseña debe tener al monos una letra mayúscula, una letra minúscula, un número y un carácter especial"
     ),
-  body("rol")
-    .notEmpty()
-    .withMessage("El rol es obligatorio")
-    .isIn(["admin", "user"]),
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
 
