@@ -1,6 +1,6 @@
-export const isAdmin = (req, res, next) => {
+export const isStaff = (req, res, next) => {
   const { rol, secretKey } = req.body;
-  if (rol === "admin" && secretKey === process.env.ADMIN_SECRET_KEY)
+  if (rol === "staff" && secretKey === process.env.STAFF_SECRET_KEY)
     return next();
 
   console.warn("Intento de acceso malicioso detectado", {
