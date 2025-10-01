@@ -18,7 +18,7 @@ router
 router
   .route("/:id")
   .get(leerProductoID)
-  .delete(borrarProducto)
-  .put(validarProducto, editarProducto);
+  .delete(verificarJWT, borrarProducto)
+  .put([verificarJWT, validarProducto], editarProducto);
 
 export default router;
