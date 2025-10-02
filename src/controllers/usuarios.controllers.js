@@ -49,6 +49,18 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
+export const borrarUsuario = async (req, res) => {
+  try {
+    const usuarioBorrado = await Usuario.findOneAndDelete(req.params.id);
+    if (!usuarioBorrado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json({ message: "Usuario borrado con exito" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al borrar los usuarios" });
+  }
+};
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
