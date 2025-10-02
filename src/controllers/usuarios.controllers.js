@@ -61,6 +61,21 @@ export const borrarUsuario = async (req, res) => {
   }
 };
 
+export const editarUsuario = async (req, res) => {
+  try {
+    const usuarioEditado = await Usuario.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    if (!usuarioEditado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json({ message: "Usuario editado con exito" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al editar los usuarios" });
+  }
+};
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
