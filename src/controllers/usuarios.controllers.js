@@ -12,6 +12,18 @@ export const leerUsuarios = async (req, res) => {
   }
 };
 
+export const leerUsuariosPorID = async (req, res) => {
+  try {
+    const usuarioBuscado = await Usuario.findOne(req.params.id);
+    if (!usuarioBuscado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json(usuarioBuscado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al leer los usuarios" });
+  }
+};
+
 export const crearUsuario = async (req, res) => {
   try {
     const { nombreUsuario, email, password } = req.body;
