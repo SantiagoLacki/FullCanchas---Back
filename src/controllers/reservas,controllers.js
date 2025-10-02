@@ -6,7 +6,19 @@ const leerReservas = async (req, res) => {
     res.status(200).json(reservas);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: "No se pudo leer la reserva" });
+    res.status(500).json({ mensaje: "Error al leer las reservas" });
+  }
+};
+
+const leerReservasPorID = async (req, res) => {
+  try {
+    const reservaBuscada = Reservas.findById(req.body.id).populate("idUsuario");
+    if (!reservaBuscada)
+      return res.status(404).json({ message: "Reserva no encontrado" });
+    res.status(200).json(reservaBuscada);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al leer la reserva" });
   }
 };
 
