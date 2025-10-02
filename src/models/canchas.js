@@ -22,13 +22,13 @@ const canchasSchema = new Schema({
   tipoDeSuperficie: {
     type: String,
     required: true,
-    enum: ["césped", "césped artificial", "tierra", "pista dura"],
-    trim: true,
+    enum: ["Césped", "Césped artificial", "Tierra", "Pista dura"],
   },
   precioPorHora: {
     type: Number,
     required: true,
     min: 0,
+    max: 1000000,
   },
   disponibilidad: { type: String, enum: [true, false], default: true },
 });

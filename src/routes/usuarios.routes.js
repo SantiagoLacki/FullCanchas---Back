@@ -4,11 +4,15 @@ import {
   leerUsuarios,
   login,
 } from "../controllers/usuarios.controllers.js";
-import { isAdmin } from "../middleware/validarAdmin.js";
+import { isAdminOrStaff } from "../middleware/validarAdminStaff.js";
+import validarUsuarios from "../middleware/validarUsuarios.js";
 
 const router = Router();
 
-router.route("/").get(leerUsuarios).post(isAdmin, crearUsuario);
+router
+  .route("/")
+  .get(leerUsuarios)
+  .post([validarUsuarios, isAdminOrStaff], crearUsuario);
 router.route("/login").post(login);
 
 export default router;

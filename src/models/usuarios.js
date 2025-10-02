@@ -6,13 +6,15 @@ const usuariosSchema = new Schema(
       type: String,
       required: true,
       minLength: 2,
-      maxLength: 100,
+      maxLength: 50,
       trim: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
       validate: {
         validator: (valor) => {
           return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(
@@ -34,7 +36,7 @@ const usuariosSchema = new Schema(
         },
       },
     },
-    rol: { type: String, enum: ["admin", "user"], default: "user" },
+    rol: { type: String, enum: ["staff", "admin", "user"], default: "user" },
   },
   {
     timestamps: true,

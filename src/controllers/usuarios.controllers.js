@@ -1,3 +1,4 @@
+import generarJWT from "../helpers/generarJWT.js";
 import Usuario from "../models/usuarios.js";
 import bcrypt from "bcrypt";
 
@@ -13,17 +14,15 @@ export const leerUsuarios = async (req, res) => {
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { nombreUsuario, email, password, rol } = req.body;
+    const { nombreUsuario, email, password } = req.body;
     const saltos = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, saltos);
-
-    const rolAsignado = rol === "admin" ? "admin" : "user";
 
     const nuevoUsuario = new Usuario({
       nombreUsuario,
       email,
       password: passwordHash,
-      rol: rolAsignado,
+      rol: req.rolAsignado,
     });
     await nuevoUsuario.save();
     res.status(201).json({
@@ -38,4 +37,31 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {};
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const usuarioExistente = await Usuario.findOne({ email });
+    if (!usuarioExistente) {
+      return res.status(404).json({ mensaje: "No se encontro el usuario" });
+    }
+    const passwordVerificado = bcrypt.compareSync(
+      password,
+      usuarioExistente.password
+    );
+    if (!passwordVerificado) {
+      return res.status(401).json({ mensaje: "Credenciales incorrectas" });
+    }
+    const token = await generarJWT(
+      usuarioExistente.nombreUsuario,
+      usuarioExistente.email
+    );
+    res.status(200).json({
+      mensaje: "Login exitoso",
+      nombreUsuario: usuarioExistente.nombreUsuario,
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al loguear el usuario" });
+  }
+};

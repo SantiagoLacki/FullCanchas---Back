@@ -4,11 +4,11 @@ const productoSchema = new Schema({
   nombre: {
     type: String,
     required: true,
-    minLength: 10,
+    minLength: 2,
     maxLength: 100,
     unique: true,
   },
-  precio: { type: Number, required: true, min: 1, max: 1000000 },
+  precio: { type: Number, required: true, min: 0, max: 1000000 },
   categoria: {
     type: String,
     required: true,
@@ -19,7 +19,7 @@ const productoSchema = new Schema({
     required: true,
     validate: {
       validator: (valor) => {
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?(\.(jpg|jpeg|png|webp))$/.test(
+        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?(\.(jpg|jpeg|gif|png|webp))$/.test(
           valor
         );
       },

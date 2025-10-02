@@ -6,10 +6,19 @@ import {
   borrarProducto,
   editarProducto,
 } from "../controllers/productos.controllers.js";
+import validarProducto from "../middleware/validarProductos.js";
+import verificarJWT from "../middleware/verificarJWT.js";
 
 const router = Router();
 
-router.route("/").get(leerProductos).post(crearProducto);
-router.route("/:id").get(leerProductoID).delete(borrarProducto).put(editarProducto);
+router
+  .route("/")
+  .get(leerProductos)
+  .post([verificarJWT, validarProducto], crearProducto);
+router
+  .route("/:id")
+  .get(leerProductoID)
+  .delete(verificarJWT, borrarProducto)
+  .put([verificarJWT, validarProducto], editarProducto);
 
 export default router;
