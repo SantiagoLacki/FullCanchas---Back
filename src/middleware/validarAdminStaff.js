@@ -20,7 +20,7 @@ export const isAdminOrStaff = (req, res, next) => {
     });
   }
 
-  if (!rol && !secretKey) {
+  if (!rol || !secretKey) {
     req.rolAsignado = "user";
     return next();
   } else if (!rol && secretKey) {
