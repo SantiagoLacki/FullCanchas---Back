@@ -6,7 +6,7 @@ export const isAdminOrStaff = (req, res, next) => {
       return next();
     }
     return res.status(403).json({
-      mensaje: "Intento de creacion malisiosa. Acceso denegado.",
+      mensaje: "Intento de creación malicioso. Acceso denegado.",
     });
   }
 
@@ -16,13 +16,17 @@ export const isAdminOrStaff = (req, res, next) => {
       return next();
     }
     return res.status(403).json({
-      mensaje: "Intento de creacion malisiosa. Acceso denegado.",
+      mensaje: "Intento de creación malicioso. Acceso denegado.",
     });
   }
 
-  if (!rol || !secretKey) {
+  if (!rol && !secretKey) {
     req.rolAsignado = "user";
     return next();
+  } else if (!rol && secretKey) {
+    res
+      .status(403)
+      .json({ mensaje: "Intento de creación malicioso. Acceso denegado." });
   }
 
   console.warn("Intento de acceso malicioso detectado", {
@@ -32,6 +36,6 @@ export const isAdminOrStaff = (req, res, next) => {
   });
 
   return res.status(403).json({
-    mensaje: "Acceso denegado.",
+    mensaje: "Rol inválido o intento de acceso malicioso.",
   });
 };
