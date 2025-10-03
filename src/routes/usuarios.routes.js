@@ -21,7 +21,7 @@ router
   .route("/:id")
   .get(leerUsuariosPorID)
   .delete(verificarJWT, borrarUsuario)
-  .put([verificarJWT, validarUsuarios], editarUsuario);
+  .put([verificarJWT, validarUsuarios, isAdminOrStaff], editarUsuario);
 router.route("/login").post(login);
 
 export default router;

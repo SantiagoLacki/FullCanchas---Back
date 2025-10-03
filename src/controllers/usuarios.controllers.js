@@ -14,7 +14,7 @@ export const leerUsuarios = async (req, res) => {
 
 export const leerUsuariosPorID = async (req, res) => {
   try {
-    const usuarioBuscado = await Usuario.findOne(req.params.id);
+    const usuarioBuscado = await Usuario.findById(req.params.id);
     if (!usuarioBuscado)
       return res.status(404).json({ message: "Usuario no encontrado" });
     res.status(200).json(usuarioBuscado);
@@ -51,7 +51,7 @@ export const crearUsuario = async (req, res) => {
 
 export const borrarUsuario = async (req, res) => {
   try {
-    const usuarioBorrado = await Usuario.findOneAndDelete(req.params.id);
+    const usuarioBorrado = await Usuario.findByIdAndDelete(req.params.id);
     if (!usuarioBorrado)
       return res.status(404).json({ message: "Usuario no encontrado" });
     res.status(200).json({ message: "Usuario borrado con exito" });
@@ -63,10 +63,21 @@ export const borrarUsuario = async (req, res) => {
 
 export const editarUsuario = async (req, res) => {
   try {
+    const { nombreUsuario, email, password } = req.body;
+    const datosActualizados = {};
+    if (nombreUsuario) datosActualizados.nombreUsuario = nombreUsuario;
+    if (email) datosActualizados.email = email;
+    if (password) {
+      const saltos = bcrypt.genSaltSync(10);
+      datosActualizados.password = bcrypt.hashSync(password, saltos);
+    }
+    if (req.rolAsignado) datosActualizados.rol = req.rolAsignado;
+
     const usuarioEditado = await Usuario.findByIdAndUpdate(
       req.params.id,
-      req.body
+      datosActualizados
     );
+
     if (!usuarioEditado)
       return res.status(404).json({ message: "Usuario no encontrado" });
     res.status(200).json({ message: "Usuario editado con exito" });
