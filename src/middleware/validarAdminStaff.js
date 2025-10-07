@@ -1,18 +1,32 @@
 export const isAdminOrStaff = (req, res, next) => {
   const { rol, secretKey } = req.body;
-  if (rol === "admin" && secretKey === process.env.ADMIN_SECRET_KEY) {
-    req.rolAsignado = "admin";
-    return next();
+  if (rol === "admin") {
+    if (secretKey === process.env.ADMIN_SECRET_KEY) {
+      req.rolAsignado = "admin";
+      return next();
+    }
+    return res.status(403).json({
+      mensaje: "Intento de creación malicioso. Acceso denegado.",
+    });
   }
 
-  if (rol === "staff" && secretKey === process.env.STAFF_SECRET_KEY) {
-    req.rolAsignado = "staff";
-    return next();
+  if (rol === "staff") {
+    if (secretKey === process.env.STAFF_SECRET_KEY) {
+      req.rolAsignado = "staff";
+      return next();
+    }
+    return res.status(403).json({
+      mensaje: "Intento de creación malicioso. Acceso denegado.",
+    });
   }
 
   if (!rol || !secretKey) {
     req.rolAsignado = "user";
     return next();
+  } else if (!rol && secretKey) {
+    res
+      .status(403)
+      .json({ mensaje: "Intento de creación malicioso. Acceso denegado." });
   }
 
   console.warn("Intento de acceso malicioso detectado", {
@@ -22,6 +36,6 @@ export const isAdminOrStaff = (req, res, next) => {
   });
 
   return res.status(403).json({
-    mensaje: "Acceso denegado.",
+    mensaje: "Rol inválido o intento de acceso malicioso.",
   });
 };

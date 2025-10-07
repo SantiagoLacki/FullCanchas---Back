@@ -12,6 +12,18 @@ export const leerUsuarios = async (req, res) => {
   }
 };
 
+export const leerUsuariosPorID = async (req, res) => {
+  try {
+    const usuarioBuscado = await Usuario.findById(req.params.id);
+    if (!usuarioBuscado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json(usuarioBuscado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al leer los usuarios" });
+  }
+};
+
 export const crearUsuario = async (req, res) => {
   try {
     const { nombreUsuario, email, password } = req.body;
@@ -34,6 +46,44 @@ export const crearUsuario = async (req, res) => {
     }
     console.error(error);
     res.status(500).json({ mensaje: "Error al crear el usuario" });
+  }
+};
+
+export const borrarUsuario = async (req, res) => {
+  try {
+    const usuarioBorrado = await Usuario.findByIdAndDelete(req.params.id);
+    if (!usuarioBorrado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json({ message: "Usuario borrado con exito" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al borrar los usuarios" });
+  }
+};
+
+export const editarUsuario = async (req, res) => {
+  try {
+    const { nombreUsuario, email, password } = req.body;
+    const datosActualizados = {};
+    if (nombreUsuario) datosActualizados.nombreUsuario = nombreUsuario;
+    if (email) datosActualizados.email = email;
+    if (password) {
+      const saltos = bcrypt.genSaltSync(10);
+      datosActualizados.password = bcrypt.hashSync(password, saltos);
+    }
+    if (req.rolAsignado) datosActualizados.rol = req.rolAsignado;
+
+    const usuarioEditado = await Usuario.findByIdAndUpdate(
+      req.params.id,
+      datosActualizados
+    );
+
+    if (!usuarioEditado)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    res.status(200).json({ message: "Usuario editado con exito" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al editar los usuarios" });
   }
 };
 
