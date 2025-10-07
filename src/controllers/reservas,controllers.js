@@ -2,7 +2,9 @@ import Reservas from "../models/reservas.js";
 
 export const leerReservas = async (req, res) => {
   try {
-    const reservas = await Reservas.find().populate("idUsuario");
+    const reservas = await Reservas.find()
+      .populate("idUsuario")
+      .populate("idCancha");
     res.status(200).json(reservas);
   } catch (error) {
     console.error(error);
@@ -12,9 +14,9 @@ export const leerReservas = async (req, res) => {
 
 export const leerReservasPorID = async (req, res) => {
   try {
-    const reservaBuscada = await Reservas.findById(req.params.id).populate(
-      "idUsuario"
-    );
+    const reservaBuscada = await Reservas.findById(req.params.id)
+      .populate("idUsuario")
+      .populate("idCancha");
     if (!reservaBuscada)
       return res.status(404).json({ message: "Reserva no encontrado" });
     res.status(200).json(reservaBuscada);

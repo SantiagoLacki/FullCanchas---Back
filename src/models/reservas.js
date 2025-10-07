@@ -4,12 +4,12 @@ const reservasSchema = new Schema(
   {
     idUsuario: {
       type: Schema.Types.ObjectId,
-      ref: "Usuarios",
+      ref: "Usuario",
       required: true,
     },
     idCancha: {
       type: Schema.Types.ObjectId,
-      ref: "Canchas",
+      ref: "Cancha",
       required: true,
     },
     dia: { type: Date, required: true },

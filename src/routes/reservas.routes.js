@@ -16,7 +16,7 @@ router
   .get(leerReservas)
   .post([verificarJWT, validarReserva], crearReservas);
 router
-  .route("/:d")
+  .route("/:id")
   .get(leerReservasPorID)
   .delete(verificarJWT, borrarReserva)
   .put([verificarJWT, validarReserva], editarReserva);
