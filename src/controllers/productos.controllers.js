@@ -1,3 +1,4 @@
+import subirImagen from "../helpers/cloudinaryUpload.js";
 import Productos from "../models/productos.js";
 
 export const leerProductos = async (req, res) => {
@@ -25,7 +26,16 @@ export const leerProductoID = async (req, res) => {
 
 export const crearProducto = async (req, res) => {
   try {
-    const crearProducto = new Productos(req.body);
+    let imagenUrl = "";
+    if (req.file) {
+      const resultado = await subirImagen(req.file.buffer);
+      imagenUrl = resultado.secure_url;
+    } else {
+      imagenUrl =
+        "https://media.istockphoto.com/id/1472933890/es/vector/no-hay-s%C3%ADmbolo-vectorial-de-imagen-falta-el-icono-disponible-no-hay-galer%C3%ADa-para-este.jpg?s=612x612&w=0&k=20&c=fTxCETonJ20MRRE6DFU9pbGws6e7sa1uySP49wU372I=";
+    }
+
+    const crearProducto = new Productos({ ...req.body, imagen: imagenUrl });
     await crearProducto.save();
     res.status(201).json({ message: "Producto creado con éxito" });
   } catch (error) {
@@ -49,17 +59,28 @@ export const borrarProducto = async (req, res) => {
 
 export const editarProducto = async (req, res) => {
   try {
-    const productoEditado = await Productos.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
-    if (!productoEditado) {
-      return res.status(404).json({ message: "Producto no encontrado" });
+    const productoBuscado = await Productos.findById(req.params.id);
+    if (!productoBuscado) {
+      return res.status(404).json({ mensaje: "El producto no fue encontrado" });
     }
-    res.status(200).json({ message: "Producto editado con exito" });
+    let imagenUrl = productoBuscado.imagen;
+
+    if (req.file) {
+      const resultado = await subirImagen(req.file.buffer);
+      imagenUrl = resultado.secure_url;
+    }
+
+    await Productos.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+      imagen: imagenUrl,
+    });
+
+    res.status(200).json({ mensaje: "El producto fue editado correctamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al editar el producto" });
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrio un error al intentar editar el producto" });
   }
 };
 
