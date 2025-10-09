@@ -62,3 +62,28 @@ export const editarProducto = async (req, res) => {
     res.status(500).json({ message: "Error al editar el producto" });
   }
 };
+
+export const productosPaginados = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [productos, total] = await Promise.all([
+      Productos.find().skip(skip).limit(limit),
+      Productos.countDocuments(),
+    ]);
+
+    res.status(200).json({
+      productos,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener los productos paginados" });
+  }
+};
