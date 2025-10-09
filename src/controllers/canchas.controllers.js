@@ -67,7 +67,7 @@ export const editarCancha = async (req, res) => {
       const resultado = await subirImagen(req.file.buffer);
       imagenUrl = resultado.secure_url;
     }
-    await Productos.findByIdAndUpdate(req.params.id, {
+    await Canchas.findByIdAndUpdate(req.params.id, {
       ...req.body,
       imagen: imagenUrl,
     });
