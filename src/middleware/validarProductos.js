@@ -27,13 +27,6 @@ const validarProducto = [
         throw new Error("El precio debe estar entre 0 y 1000000");
       }
     }),
-  body("imagen")
-    .notEmpty()
-    .withMessage("la imagen es obligatoria")
-    .matches(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|webp)/)
-    .withMessage(
-      "La imagen debe ser una URL valida y debe terminar en .jpg, .jpeg, .gif, .png o .webp"
-    ),
   body("categoria")
     .notEmpty()
     .withMessage("Debes elegir una categoria")
