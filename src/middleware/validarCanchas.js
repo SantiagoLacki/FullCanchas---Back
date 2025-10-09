@@ -7,13 +7,6 @@ const validarCanchas = [
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 2, max: 100 })
     .withMessage("El nombre debe tener entre 2 y 100 caracteres"),
-  body("imagen")
-    .notEmpty()
-    .withMessage("La imagen es obligatoria")
-    .matches(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|webp)/)
-    .withMessage(
-      "La imagen debe ser una URL valida y debe terminar en .jpg, .jpeg, .gif, .png o .webp"
-    ),
   body("tipoDeSuperficie")
     .notEmpty()
     .withMessage("Este el tipo de superficie es obligatio")

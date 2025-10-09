@@ -1,4 +1,5 @@
 import Canchas from "../models/canchas.js";
+import subirImagen from "../helpers/cloudinaryUpload.js";
 
 export const leerCanchas = async (req, res) => {
   try {
@@ -25,7 +26,15 @@ export const leerCanchasID = async (req, res) => {
 
 export const crearCancha = async (req, res) => {
   try {
-    const crearCancha = new Canchas(req.body);
+    let imagenUrl = "";
+    if (req.file) {
+      const resultado = await subirImagen(req.file.buffer);
+      imagenUrl = resultado.secure_url;
+    } else {
+      imagenUrl =
+        "https://media.istockphoto.com/id/1472933890/es/vector/no-hay-s%C3%ADmbolo-vectorial-de-imagen-falta-el-icono-disponible-no-hay-galer%C3%ADa-para-este.jpg?s=612x612&w=0&k=20&c=fTxCETonJ20MRRE6DFU9pbGws6e7sa1uySP49wU372I=";
+    }
+    const crearCancha = new Canchas({ ...req.body, imagen: imagenUrl });
     await crearCancha.save();
     res.status(201).json({ message: "Cancha creada con exito" });
   } catch (error) {
@@ -49,13 +58,19 @@ export const borrarCancha = async (req, res) => {
 
 export const editarCancha = async (req, res) => {
   try {
-    const canchaEditada = await Canchas.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
-    if (!canchaEditada) {
-      return res.status(404).json({ message: "Cancha no encontrada" });
+    const canchaBuscada = await Canchas.findById(req.params.id);
+    if (!canchaBuscada) {
+      return res.status(404).json({ mensaje: "La cancha no fue encontrada" });
     }
+    let imagenUrl = canchaBuscada.imagen;
+    if (req.file) {
+      const resultado = await subirImagen(req.file.buffer);
+      imagenUrl = resultado.secure_url;
+    }
+    await Productos.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+      imagen: imagenUrl,
+    });
     res.status(200).json({ message: "Cancha editada con exito" });
   } catch (error) {
     console.error(error);
