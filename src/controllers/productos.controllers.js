@@ -1,3 +1,4 @@
+import subirImagen from "../helpers/cloudinaryUpload.js";
 import Productos from "../models/productos.js";
 
 export const leerProductos = async (req, res) => {
@@ -25,7 +26,16 @@ export const leerProductoID = async (req, res) => {
 
 export const crearProducto = async (req, res) => {
   try {
-    const crearProducto = new Productos(req.body);
+    let imagenUrl = "";
+    if (req.file) {
+      const resultado = await subirImagen(req.file.buffer);
+      imagenUrl = resultado.secure_url;
+    } else {
+      imagenUrl =
+        "https://media.istockphoto.com/id/1472933890/es/vector/no-hay-s%C3%ADmbolo-vectorial-de-imagen-falta-el-icono-disponible-no-hay-galer%C3%ADa-para-este.jpg?s=612x612&w=0&k=20&c=fTxCETonJ20MRRE6DFU9pbGws6e7sa1uySP49wU372I=";
+    }
+
+    const crearProducto = new Productos({ ...req.body, imagen: imagenUrl });
     await crearProducto.save();
     res.status(201).json({ message: "Producto creado con éxito" });
   } catch (error) {
