@@ -107,7 +107,10 @@ export const login = async (req, res) => {
     );
     res.status(200).json({
       mensaje: "Login exitoso",
+      id: usuarioExistente.id,
       nombreUsuario: usuarioExistente.nombreUsuario,
+      rol: usuarioExistente.rol,
+      email: usuarioExistente.email,
       token,
     });
   } catch (error) {
