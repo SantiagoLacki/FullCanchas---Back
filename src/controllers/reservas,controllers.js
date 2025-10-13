@@ -63,3 +63,30 @@ export const editarReserva = async (req, res) => {
     res.status(500).json({ mensaje: "No se pudo editar la reserva" });
   }
 };
+
+export const reservasPaginadas = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [reservas, total] = await Promise.all([
+      Reservas.find()
+        .skip(skip)
+        .limit(limit)
+        .populate("idUsuario")
+        .populate("idCancha"),
+      Reservas.countDocuments(),
+    ]);
+
+    res.status(200).json({
+      reservas,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al leer las reservas" });
+  }
+};
