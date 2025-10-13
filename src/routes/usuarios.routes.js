@@ -6,6 +6,7 @@ import {
   leerUsuarios,
   leerUsuariosPorID,
   login,
+  usuariosPaginacion,
 } from "../controllers/usuarios.controllers.js";
 import { isAdminOrStaff } from "../middleware/validarAdminStaff.js";
 import validarUsuarios from "../middleware/validarUsuarios.js";
@@ -17,6 +18,7 @@ router
   .route("/")
   .get(leerUsuarios)
   .post([validarUsuarios, isAdminOrStaff], crearUsuario);
+router.route("/paginado").get(usuariosPaginacion);
 router
   .route("/:id")
   .get(leerUsuariosPorID)
