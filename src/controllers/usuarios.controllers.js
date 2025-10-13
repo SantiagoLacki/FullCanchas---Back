@@ -118,3 +118,26 @@ export const login = async (req, res) => {
     res.status(500).json({ mensaje: "Error al loguear el usuario" });
   }
 };
+
+export const usuariosPaginacion = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [usuario, total] = await Promise.all([
+      Usuario.find().skip(skip).limit(limit),
+      Usuario.countDocuments(),
+    ]);
+
+    res.status(200).json({
+      usuario,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al leer los usuarios" });
+  }
+};
