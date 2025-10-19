@@ -32,7 +32,7 @@ export const crearCancha = async (req, res) => {
       imagenUrl = resultado.secure_url;
     } else {
       imagenUrl =
-        "https://media.istockphoto.com/id/1472933890/es/vector/no-hay-s%C3%ADmbolo-vectorial-de-imagen-falta-el-icono-disponible-no-hay-galer%C3%ADa-para-este.jpg?s=612x612&w=0&k=20&c=fTxCETonJ20MRRE6DFU9pbGws6e7sa1uySP49wU372I=";
+        "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg";
     }
     const crearCancha = new Canchas({ ...req.body, imagen: imagenUrl });
     await crearCancha.save();
