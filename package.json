@@ -3,11 +3,23 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node --env-file .env --watch index.js"
   },
   "keywords": [],
   "author": "Insinga Alejandro, Tebis Marcos Joel, Mattos Omar Oscar Alfredo, Lacki Sinclair Santiago",
   "license": "MIT",
   "description": "Backend de la web del complejo de canchas fullcanchas",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2"
+  }
 }
