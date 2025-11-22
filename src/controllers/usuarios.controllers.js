@@ -114,6 +114,7 @@ export const login = async (req, res) => {
       nombreUsuario: usuarioExistente.nombreUsuario,
       rol: usuarioExistente.rol,
       email: usuarioExistente.email,
+      habilitado: usuarioExistente.habilitado,
       token,
     });
   } catch (error) {
