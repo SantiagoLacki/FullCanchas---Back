@@ -1,4 +1,4 @@
-export const verificarRol = (...rolesPermitidos) => {
+const verificarRol = (...rolesPermitidos) => {
   return (req, res, next) => {
     if (!rolesPermitidos.includes(req.usuario.rol)) {
       return res.status(403).json({ mensaje: "Acceso denegado" });
@@ -6,3 +6,5 @@ export const verificarRol = (...rolesPermitidos) => {
     next();
   };
 };
+
+export default verificarRol;

@@ -1,4 +1,4 @@
-export const asignarRol = (req, res, next) => {
+const asignarRol = (req, res, next) => {
   const { rol } = req.body;
   if (!req.usuario) {
     req.rolAsignado = "user";
@@ -18,3 +18,5 @@ export const asignarRol = (req, res, next) => {
   req.rolAsignado = "user";
   next();
 };
+
+export default asignarRol;
