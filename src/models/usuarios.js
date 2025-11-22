@@ -36,7 +36,7 @@ const usuariosSchema = new Schema(
         },
       },
     },
-    rol: { type: String, enum: ["staff", "admin", "user"], default: "user" },
+    rol: { type: String, enum: ["superAdmin", "admin", "empleado", "user"], default: "user" },
   },
   {
     timestamps: true,
