@@ -94,6 +94,9 @@ export const login = async (req, res) => {
     if (!usuarioExistente) {
       return res.status(404).json({ mensaje: "No se encontro el usuario" });
     }
+    if (!usuarioExistente.habilitado) {
+      return res.status(403).json({ mensaje: "Usuario deshabilitado" });
+    }
     const passwordVerificado = bcrypt.compareSync(
       password,
       usuarioExistente.password

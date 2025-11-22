@@ -41,6 +41,11 @@ const usuariosSchema = new Schema(
       enum: ["superAdmin", "admin", "empleado", "user"],
       default: "user",
     },
+    habilitado: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
   },
   {
     timestamps: true,
