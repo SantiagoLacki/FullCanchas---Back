@@ -26,7 +26,7 @@ export const leerUsuariosPorID = async (req, res) => {
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { nombreUsuario, email, password } = req.body;
+    const { nombreUsuario, email, password, habilitado } = req.body;
     const saltos = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, saltos);
 
@@ -35,6 +35,7 @@ export const crearUsuario = async (req, res) => {
       email,
       password: passwordHash,
       rol: req.rolAsignado,
+      habilitado: habilitado ?? true,
     });
     await nuevoUsuario.save();
     res.status(201).json({
@@ -51,13 +52,25 @@ export const crearUsuario = async (req, res) => {
 
 export const borrarUsuario = async (req, res) => {
   try {
-    const usuarioBorrado = await Usuario.findByIdAndDelete(req.params.id);
-    if (!usuarioBorrado)
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    res.status(200).json({ message: "Usuario borrado con exito" });
+    const usuarioBuscado = await Usuario.findById(req.params.id);
+    if (!usuarioBuscado) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+    if (req.usuario.rol === "admin" && usuarioBuscado.rol === "superAdmin") {
+      return res
+        .status(403)
+        .json({ mensaje: "No puedes borrar a un superAdmin" });
+    }
+    if (req.usuario.rol === "user" || req.usuario.rol === "empleado") {
+      return res
+        .status(403)
+        .json({ mensaje: "No tienes permisos para borrar usuarios" });
+    }
+    await Usuario.findByIdAndDelete(req.params.id);
+    res.status(200).json({ mensaje: "Usuario borrado con éxito" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: "Error al borrar los usuarios" });
+    res.status(500).json({ mensaje: "Error al borrar el usuario" });
   }
 };
 
@@ -94,6 +107,9 @@ export const login = async (req, res) => {
     if (!usuarioExistente) {
       return res.status(404).json({ mensaje: "No se encontro el usuario" });
     }
+    if (!usuarioExistente.habilitado) {
+      return res.status(403).json({ mensaje: "Usuario deshabilitado" });
+    }
     const passwordVerificado = bcrypt.compareSync(
       password,
       usuarioExistente.password
@@ -111,6 +127,7 @@ export const login = async (req, res) => {
       nombreUsuario: usuarioExistente.nombreUsuario,
       rol: usuarioExistente.rol,
       email: usuarioExistente.email,
+      habilitado: usuarioExistente.habilitado,
       token,
     });
   } catch (error) {
