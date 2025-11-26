@@ -26,8 +26,13 @@ const productoSchema = new Schema({
     },
   },
   descripcion: { type: String, required: true, minLength: 10, maxLength: 500 },
+  habilitado: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 });
 
-const Productos = mongoose.model("producto", productoSchema);
+const Productos = mongoose.model("Producto", productoSchema);
 
 export default Productos;

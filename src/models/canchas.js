@@ -30,7 +30,11 @@ const canchasSchema = new Schema({
     min: 0,
     max: 1000000,
   },
-  disponibilidad: { type: String, enum: [true, false], default: true },
+  habilitado: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 });
 
 const Canchas = mongoose.model("Cancha", canchasSchema);
