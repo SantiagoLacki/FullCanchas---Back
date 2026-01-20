@@ -12,6 +12,7 @@ import validarUsuarios from "../middleware/validarUsuarios.js";
 import verificarJWT from "../middleware/verificarJWT.js";
 import asignarRol from "../middleware/asignarRol.js";
 import verificarUsuarioHabilitado from "../middleware/verificarUsuarioHabilitado.js";
+import validarUsuarioModificado from "../middleware/validarUsuarioModificado.js";
 
 const router = Router();
 
@@ -25,7 +26,12 @@ router
   .get(leerUsuariosPorID)
   .delete([verificarJWT, verificarUsuarioHabilitado], borrarUsuario)
   .put(
-    [verificarJWT, verificarUsuarioHabilitado, validarUsuarios, asignarRol],
+    [
+      verificarJWT,
+      verificarUsuarioHabilitado,
+      validarUsuarioModificado,
+      asignarRol,
+    ],
     editarUsuario
   );
 router.route("/login").post(login);
