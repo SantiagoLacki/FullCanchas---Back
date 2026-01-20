@@ -12,7 +12,6 @@ import validarUsuarios from "../middleware/validarUsuarios.js";
 import verificarJWT from "../middleware/verificarJWT.js";
 import asignarRol from "../middleware/asignarRol.js";
 import verificarUsuarioHabilitado from "../middleware/verificarUsuarioHabilitado.js";
-import validarUsuarioModificado from "../middleware/validarUsuarioModificado.js";
 
 const router = Router();
 
@@ -25,15 +24,7 @@ router
   .route("/:id")
   .get(leerUsuariosPorID)
   .delete([verificarJWT, verificarUsuarioHabilitado], borrarUsuario)
-  .put(
-    [
-      verificarJWT,
-      verificarUsuarioHabilitado,
-      validarUsuarioModificado,
-      asignarRol,
-    ],
-    editarUsuario
-  );
+  .put([verificarJWT, verificarUsuarioHabilitado, asignarRol], editarUsuario);
 router.route("/login").post(login);
 
 export default router;
