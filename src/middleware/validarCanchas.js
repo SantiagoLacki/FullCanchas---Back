@@ -27,7 +27,7 @@ const validarCanchas = [
       }
     }),
   ,
-  body("disponibilidad")
+  body("habilitado")
     .notEmpty()
     .withMessage("Este campo es obligatorio")
     .isIn(["true", "false"])
