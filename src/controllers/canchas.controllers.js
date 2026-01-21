@@ -62,14 +62,34 @@ export const editarCancha = async (req, res) => {
     if (!canchaBuscada) {
       return res.status(404).json({ mensaje: "La cancha no fue encontrada" });
     }
+    const datosActualizados = {};
+    if (req.body.nombre !== undefined)
+      datosActualizados.nombre = req.body.nombre;
+    if (req.body.tipoDeSuperficie !== undefined)
+      datosActualizados.tipoDeSuperficie = req.body.tipoDeSuperficie;
+    if (req.body.precioPorHora !== undefined)
+      datosActualizados.precioPorHora = req.body.precioPorHora;
+    if (req.body.habilitado !== undefined) {
+      if (req.body.habilitado === "false" || req.body.habilitado === false) {
+        datosActualizados.habilitado = false;
+      } else {
+        datosActualizados.habilitado = true;
+      }
+    }
+
     let imagenUrl = canchaBuscada.imagen;
+
     if (req.file) {
       const resultado = await subirImagen(req.file.buffer);
       imagenUrl = resultado.secure_url;
     }
-    await Canchas.findByIdAndUpdate(req.params.id, {
-      ...req.body,
-      imagen: imagenUrl,
+
+    if (req.file) {
+      datosActualizados.imagen = imagenUrl;
+    }
+
+    await Canchas.findByIdAndUpdate(req.params.id, datosActualizados, {
+      new: true,
     });
     res.status(200).json({ message: "Cancha editada con exito" });
   } catch (error) {

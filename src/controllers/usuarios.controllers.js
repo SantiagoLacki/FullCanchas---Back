@@ -76,7 +76,7 @@ export const borrarUsuario = async (req, res) => {
 
 export const editarUsuario = async (req, res) => {
   try {
-    const { nombreUsuario, email, password } = req.body;
+    const { nombreUsuario, email, password, habilitado } = req.body;
     const datosActualizados = {};
     if (nombreUsuario) datosActualizados.nombreUsuario = nombreUsuario;
     if (email) datosActualizados.email = email;
@@ -85,6 +85,8 @@ export const editarUsuario = async (req, res) => {
       datosActualizados.password = bcrypt.hashSync(password, saltos);
     }
     if (req.rolAsignado) datosActualizados.rol = req.rolAsignado;
+
+    if (habilitado !== undefined) datosActualizados.habilitado = habilitado;
 
     const usuarioEditado = await Usuario.findByIdAndUpdate(
       req.params.id,
