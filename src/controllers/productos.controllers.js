@@ -63,6 +63,23 @@ export const editarProducto = async (req, res) => {
     if (!productoBuscado) {
       return res.status(404).json({ mensaje: "El producto no fue encontrado" });
     }
+    const datosActualizados = {};
+    if (req.body.nombre !== undefined)
+      datosActualizados.nombre = req.body.nombre;
+    if (req.body.precio !== undefined)
+      datosActualizados.precio = req.body.precio;
+    if (req.body.categoria !== undefined)
+      datosActualizados.categoria = req.body.categoria;
+    if (req.body.descripcion !== undefined)
+      datosActualizados.descripcion = req.body.descripcion;
+    if (req.body.habilitado !== undefined) {
+      if (req.body.habilitado === "false" || req.body.habilitado === false) {
+        datosActualizados.habilitado = false;
+      } else {
+        datosActualizados.habilitado = true;
+      }
+    }
+
     let imagenUrl = productoBuscado.imagen;
 
     if (req.file) {
@@ -70,9 +87,12 @@ export const editarProducto = async (req, res) => {
       imagenUrl = resultado.secure_url;
     }
 
-    await Productos.findByIdAndUpdate(req.params.id, {
-      ...req.body,
-      imagen: imagenUrl,
+    if (req.file) {
+      datosActualizados.imagen = imagenUrl;
+    }
+
+    await Productos.findByIdAndUpdate(req.params.id, datosActualizados, {
+      new: true,
     });
 
     res.status(200).json({ mensaje: "El producto fue editado correctamente" });
