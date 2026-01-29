@@ -19,6 +19,17 @@ const asignarRol = (req, res, next) => {
       mensaje: "Un admin solo puede crear empleados o usuarios comunes",
     });
   }
+
+  if (req.usuario.rol === "empleado") {
+    if (rol) {
+      return res.status(403).json({
+        mensaje: "Los empleados no pueden cambiar roles de usuarios",
+      });
+    }
+    req.rolAsignado = undefined;
+    return next();
+  }
+
   return res.status(403).json({
     mensaje: "No tienes permisos para crear usuarios",
   });
